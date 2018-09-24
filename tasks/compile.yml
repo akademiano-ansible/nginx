@@ -89,7 +89,8 @@
 
        -- MrDataMapper <mrdatamapper@gmail.com>  Mon, 24 Sep 2018 08:38:29 +0000
 
-- shell: export CCACHE_DIR=$(realpath ~/.ccache); debuild --preserve-envvar=CCACHE_DIR --prepend-path=/usr/lib/ccache -us -uc
+- name: compile nginx with modules
+  shell: export CCACHE_DIR=$(realpath ~/.ccache); debuild --preserve-envvar=CCACHE_DIR --prepend-path=/usr/lib/ccache -us -uc
   args:
     executable: /bin/bash
     chdir: "{{build_nginx_dir}}"

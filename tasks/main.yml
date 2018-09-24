@@ -7,11 +7,13 @@
   shell: nginx -v 2>&1  | awk -F "/" '{print $2}' | egrep "^[0-9]"
   args: 
     executable: /bin/bash
+  ignore_errors: yes
   register: nginx_exist_result
+  changed_when: false
 
 - set_fact:
     nginx_installed_version: "{{nginx_exist_result.stdout}}"
-  cacheable: yes
+    cacheable: true
   when: nginx_exist_result.rc == 0
 
 - debug:
