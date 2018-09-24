@@ -1,2 +1,28 @@
 ---
 # defaults file for nginx
+
+nginx_build_packages:
+  - devscripts 
+  - build-essential
+  - fakeroot
+  - ccache
+  - unzip
+
+nginx_additional_modules:
+  - name: headers-more
+    url: https://github.com/openresty/headers-more-nginx-module/archive/master.zip
+  - name: http_json_status
+    url: https://github.com/nginx-modules/ngx_http_json_status_module/archive/master.zip
+  - name: cache_purge
+    url: https://github.com/nginx-modules/ngx_cache_purge/archive/2.4.2.zip
+#  - name: lua
+#    url: https://github.com/openresty/lua-nginx-module/archive/v0.10.12rc1.zip
+  - name: requestid
+    url: https://github.com/hhru/nginx_requestid/archive/master.zip
+#  - name: naxsi
+#    url: https://github.com/nbs-system/naxsi/archive/0.56.zip
+  - name: devel_kit
+    url: https://github.com/simplresty/ngx_devel_kit/archive/v0.3.1rc1.zip
+#  - name: pagespeed
+#    url: https://github.com/apache/incubator-pagespeed-ngx/archive/v1.13.35.2-stable.zip
+

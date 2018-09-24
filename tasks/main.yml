@@ -1,54 +1,25 @@
 ---
 # tasks file for nginx
 
-- name: Add an nginx signing key, will not download if present
-  become: yes
-  apt_key:
-    id: 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62
-    url: https://nginx.org/keys/nginx_signing.key
-    state: present
+- import_tasks: repository.yml
 
-- name: add nginx repository
-  become: yes
-  apt_repository:
-    repo: deb http://nginx.org/packages/mainline/ubuntu/ {{ ansible_distribution_release }} nginx
-    state: present
-    filename: nginx
+- name: check nginx is installed
+  shell: nginx -v 2>&1  | awk -F "/" '{print $2}' | egrep "^[0-9]"
+  args: 
+    executable: /bin/bash
+  register: nginx_exist_result
 
-- name: install nginx
-  become: yes
-  apt:
-    name: nginx
-    state: latest
+- set_fact:
+    nginx_installed_version: "{{nginx_exist_result.stdout}}"
+  cacheable: yes
+  when: nginx_exist_result.rc == 0
 
-- name: Enable service nginx, and set running state
-  become: yes
-  service:
-    name: nginx
-    enabled: yes
-    state: started
+- debug:
+    msg: "Current installed nginx with version: {{nginx_installed_version}}"
+  when: nginx_installed_version is defined
 
-- name: Create nginx conf dirs
-  become: yes
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: root
-    group: root
-    mode: 0775
-  with_items:
-    - /etc/nginx/conf.d
-    - /etc/nginx/conf.sites.d
-    - /etc/nginx/sites
+- name: compile nginx from src
+  include_tasks: compile.yml
+  when: nginx_installed_version is not defined
 
-- name: Create nginx configs
-  become: yes
-  template:
-    src: "{{ item.src }}"
-    dest: "/etc/nginx/{{ item.path }}"
-    mode: "{{ item.mode }}"
-    owner: root
-    group: root
-  with_filetree:  templates/
-  when: item.state == 'file'
-  notify: reload nginx
+- import_tasks: configure.yml
