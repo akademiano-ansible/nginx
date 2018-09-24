@@ -110,6 +110,10 @@
     state: present
   become: yes
 
-
+- name: hold nginx package
+  shell: apt-mark hold nginx
+  args:
+    executable: /bin/bash
+  become: yes
 
 
