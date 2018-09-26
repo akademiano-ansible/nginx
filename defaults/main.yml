@@ -1,6 +1,12 @@
 ---
 # defaults file for nginx
 
+nginx_build_date: "{{ lookup('pipe','date -R') }}"
+
+nginx_build_user: MrDataMapper
+
+nginx_build_user_email: mrdatamapper@gmail.com
+
 nginx_build_packages:
   - devscripts 
   - build-essential

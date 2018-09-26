@@ -35,7 +35,20 @@
     mode: "{{ item.mode }}"
     owner: root
     group: root
-  with_filetree:  templates/
+  with_filetree:  templates/etc/
   when: item.state == 'file'
   notify: nginx reload
 
+- name: Create default site dir
+  become: yes
+  file: 
+    path: /var/www/default.dev/public
+    state: directory
+
+- name: create default site
+  become: yes
+  template:
+    src: "{{ item.src }}"
+    dest: "/var/www/default.dev/public/{{ item.path }}"
+  with_filetree:  templates/www/default.dev/
+  when: item.state == 'file'

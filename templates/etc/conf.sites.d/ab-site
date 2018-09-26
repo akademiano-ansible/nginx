@@ -1,6 +1,6 @@
-    root /var/www/$server_real_name/public;
+    root /var/www/$server_real_name/$appversion/public;
 
-    index index.php index.html;    
+    index index.php index.html;
 
     trequestid on;
     more_set_headers 'Request-Id $trequest_id';
@@ -10,8 +10,6 @@
     userid_name    uidsimple;
     userid_path    /;
     userid_expires 365d;
-
-    include send_graylog;
 
     include referer-spam;
 
@@ -36,6 +34,6 @@
     location @php {
         fastcgi_pass   php-www;
         include fastcgi_params;
-        fastcgi_param  SCRIPT_FILENAME  /var/www/$server_real_name/public/index.php;
+        fastcgi_param  SCRIPT_FILENAME  /var/www/$server_real_name/$appversion/public/index.php;
         fastcgi_param  SCRIPT_NAME      index.php;
     }

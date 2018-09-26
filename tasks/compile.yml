@@ -46,16 +46,16 @@
   args:
     chdir: "{{build_root_dir}}"
 
-- shell:  ls | egrep "^nginx-[0-9|\.]+$"
+- shell:  ls | egrep "^nginx-[0-9|\.]+$" | awk -F "-" '{print $2}'
   args:
     chdir: "{{build_root_dir}}"
-  register: nginx_src_dir_result
+  register: nginx_version_result
 
 - set_fact:
-    nginx_src_dir: "{{nginx_src_dir_result.stdout}}"
+    nginx_version: "{{nginx_version_result.stdout}}"
 
 - set_fact:
-    build_nginx_dir: "{{build_root_dir}}/{{nginx_src_dir}}"
+    build_nginx_dir: "{{build_root_dir}}/nginx-{{nginx_version}}"
 
 - set_fact:
     build_nginx_modules_dir: "{{build_root_dir}}/nginx_modules"
@@ -83,11 +83,11 @@
     path: "{{build_nginx_dir}}/debian/changelog"
     insertbefore: BOF
     line: |
-      nginx (1.15.4-1~akademianobionic) bionic; urgency=low
+      nginx ({{nginx_version}}-1~akademiano~{{ansible_distribution_release}}) {{ansible_distribution_release}}; urgency=low
 
-        * 1.15.4
+        * {{nginx_version}}
 
-       -- MrDataMapper <mrdatamapper@gmail.com>  Mon, 24 Sep 2018 08:38:29 +0000
+       -- {{nginx_build_user}} <{{nginx_build_user_email}}>  {{nginx_build_date}}
 
 - name: compile nginx with modules
   shell: export CCACHE_DIR=$(realpath ~/.ccache); debuild --preserve-envvar=CCACHE_DIR --prepend-path=/usr/lib/ccache -us -uc
@@ -115,5 +115,3 @@
   args:
     executable: /bin/bash
   become: yes
-
-
