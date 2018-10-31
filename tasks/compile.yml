@@ -69,7 +69,9 @@
     state: directory
     mode: 0755
 
-- include_tasks: "module.yml modules_path={{build_nginx_modules_dir}}"
+- include_tasks: module.yml
+  vars:
+    modules_path: "{{build_nginx_modules_dir}}"
   loop: "{{nginx_additional_modules}}"
   loop_control:
     loop_var: module
