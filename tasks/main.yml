@@ -4,17 +4,33 @@
 - import_tasks: repository.yml
 
 - name: check nginx is installed
+  shell: nginx -v 2>&1
+  args: 
+    executable: /bin/bash
+  ignore_errors: yes
+  register: nginx_exist_first_result
+  changed_when: false
+
+- name: check nginx version
   shell: nginx -v 2>&1  | awk -F "/" '{print $2}' | egrep "^[0-9]"
   args: 
     executable: /bin/bash
   ignore_errors: yes
   register: nginx_exist_result
   changed_when: false
+  when: nginx_exist_first_result.rc == 0
+
+- name: Clear gathered facts
+  meta: clear_facts
+  when: nginx_exist_first_result != 0 or  nginx_exist_result is not defined or  nginx_exist_result.rc != 0
 
 - set_fact:
     nginx_installed_version: "{{nginx_exist_result.stdout}}"
     cacheable: true
-  when: nginx_exist_result.rc == 0
+  when: nginx_exist_first_result == 0 and nginx_exist_result is defined and  nginx_exist_result.rc == 0
+
+- setup:
+  when: nginx_exist_first_result != 0 or  nginx_exist_result is not defined or  nginx_exist_result.rc != 0
 
 - debug:
     msg: "Current installed nginx with version: {{nginx_installed_version}}"
