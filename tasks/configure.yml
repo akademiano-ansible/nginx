@@ -50,5 +50,5 @@
   template:
     src: "{{ item.src }}"
     dest: "/var/www/default.dev/public/{{ item.path }}"
-  with_filetree:  templates/www/default.dev/
+  with_filetree:  templates/www/default.dev/public/
   when: item.state == 'file'
