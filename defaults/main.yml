@@ -1,11 +1,14 @@
 ---
 # defaults file for nginx
+ccache_dir: /var/cache/ccache
+
+build_options_parallel: 12
 
 nginx_build_date: "{{ lookup('pipe','date -R') }}"
 
-nginx_build_user: MrDataMapper
+nginx_build_user: ansible
 
-nginx_build_user_email: mrdatamapper@gmail.com
+nginx_build_user_email: ansible@fakemail.com
 
 nginx_build_packages:
   - devscripts 
@@ -17,10 +20,8 @@ nginx_build_packages:
 nginx_additional_modules:
   - name: headers-more
     url: https://github.com/openresty/headers-more-nginx-module/archive/master.zip
-  - name: http_json_status
-    url: https://github.com/nginx-modules/ngx_http_json_status_module/archive/master.zip
   - name: cache_purge
-    url: https://github.com/nginx-modules/ngx_cache_purge/archive/2.4.2.zip
+    url: https://github.com/nginx-modules/ngx_cache_purge/archive/2.5.tar.gz
 #  - name: lua
 #    url: https://github.com/openresty/lua-nginx-module/archive/v0.10.12rc1.zip
   - name: requestid
@@ -28,7 +29,7 @@ nginx_additional_modules:
 #  - name: naxsi
 #    url: https://github.com/nbs-system/naxsi/archive/0.56.zip
   - name: devel_kit
-    url: https://github.com/simplresty/ngx_devel_kit/archive/v0.3.1rc1.zip
+    url: https://github.com/simplresty/ngx_devel_kit/archive/v0.3.1.tar.gz
 #  - name: pagespeed
 #    url: https://github.com/apache/incubator-pagespeed-ngx/archive/v1.13.35.2-stable.zip
 
