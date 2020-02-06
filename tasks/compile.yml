@@ -100,7 +100,7 @@
        -- {{nginx_build_user}} <{{nginx_build_user_email}}>  {{nginx_build_date}}
 
 - name: compile nginx with modules
-  shell: "export CCACHE_DIR=/var/cache/ccache/; export CCACHE_PREFIX=icecc; export DEB_BUILD_OPTIONS='parallel={{ build_options_parallel }}'; debuild --preserve-envvar=CCACHE_DIR --preserve-envvar=CCACHE_PREFIX --prepend-path=/usr/lib/ccache -us -uc"
+  shell: "export CCACHE_DIR=~/.ccache/; export CCACHE_PREFIX=icecc; export DEB_BUILD_OPTIONS='parallel={{ build_options_parallel }}'; debuild --preserve-envvar=CCACHE_DIR --preserve-envvar=CCACHE_PREFIX --prepend-path=/usr/lib/ccache -us -uc"
   args:
     executable: /bin/bash
     chdir: "{{build_nginx_dir}}"
